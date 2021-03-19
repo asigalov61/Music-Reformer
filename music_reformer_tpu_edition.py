@@ -405,7 +405,7 @@ model.init_from_file(os.path.join(output_dir,'model.pkl.gz'),
 #@title Generate and decode music from the model
 # Sample from ReformerLM
 output_token_ids = trax.supervised.decoding.autoregressive_sample(
-    model, temperature=0.8, max_length=1024, batch_size = 1)
+    model, temperature=0.8, max_length=2048, batch_size = 1)
 
 # Decode token IDs
 # Reformer outputed a batch with one item so access it using [0]
@@ -417,11 +417,9 @@ input = TOKENIZER.DecodeIds(output_token_ids[0].tolist())
 # If you getting errors/halts, regenerate the output again.
 # Model must be sufficiently trained. Rec. 0.90+ accuracy for the output to make sense and pass error control.
 
-TXT = TMIDI.Tegridy_INT_String_to_TXT_Converter(input, line_by_line_input=False)
-SONG = TMIDI.Tegridy_Optimus_TXT_to_Notes_Converter(TXT, has_MIDI_channels=False, char_encoding_offset=33, simulate_velocity=False, dataset_MIDI_events_time_denominator=10, line_by_line_dataset=True, has_velocities=True)
+#TXT = TMIDI.Tegridy_INT_String_to_TXT_Converter(input, line_by_line_input=False)
+SONG = TMIDI.Tegridy_Optimus_TXT_to_Notes_Converter(input, has_MIDI_channels=False, char_encoding_offset=30000, simulate_velocity=True, dataset_MIDI_events_time_denominator=1, line_by_line_dataset=False)
 stats = TMIDI.Tegridy_SONG_to_MIDI_Converter(SONG=SONG[0], output_file_name='/content/Music-Reformer_MIDI')
 print(stats)
-
-TXT
 
 """# Congrats!!! You did it!!! :)"""
